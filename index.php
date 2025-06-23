@@ -6,38 +6,7 @@ require_once './Traits/Reviews.php';
 require_once './Models/Genre.php';
 require_once './Models/Movie.php';
 
-
-
-
-
-
-$action = new Genre("Action", "A genre that emphasizes physical feats, including fights, chases, and explosions.");
-$adventure = new Genre("Adventure", "A genre that typically involves a journey or quest, often in exotic locations.");
-$war = new Genre("War", "A genre that focuses on warfare, battles, and the experiences of soldiers.");
-$scifi = new Genre("Science Fiction", "A genre that explores futuristic concepts, advanced technology, space exploration, and often speculative science.");
-
-
-$Inception = new Movie("Inception", "Christopher Nolan", 2010, "A thief who steals corporate secrets through the use of dream-sharing technology.", [$action, $scifi]);
-$Interstellar = new Movie("Interstellar", "Christopher Nolan", 2014, "A team of explorers travel through a wormhole in space in an attempt to ensure humanity's survival.", [$adventure, $scifi]);
-$Dunkirk = new Movie("Dunkirk", "Christopher Nolan", 2017, "Allied soldiers are surrounded by the German army and evacuated during a fierce battle in World War II.", [$war, $action]);
-
-$Inception->addReview(new Review("Alice", "Amazing movie with a complex plot!"));
-$Inception->addReview(new Review("Bob", "A visual masterpiece."));
-$Interstellar->addReview(new Review("Charlie", "A thought-provoking journey through space and time."));
-$Dunkirk->addReview(new Review("David", "Intense and gripping from start to finish."));
-
-var_dump($Inception);
-echo "<br>";
-echo $Inception->getDescription();
-echo "<br>";
-var_dump($Interstellar);
-echo "<br>";
-echo $Interstellar->getDescription();
-echo "<br>";
-var_dump($Dunkirk);
-echo "<br>";
-echo $Dunkirk->getDescription();
-echo "<br>";
+require_once './db.php';
 
 ?>
 
@@ -46,9 +15,44 @@ echo "<br>";
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link href='https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css' rel='stylesheet' integrity='sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH' crossorigin='anonymous'>
+
     <title>Movie PHP</title>
 </head>
 <body>
-    
+
+    <?php require_once './Components/Header.php'; ?>
+
+
+    <main class="container mt-5">
+        <h1 class="text-center mb-4 text-warning">Movie List</h1>
+        <div class="row">
+            <?php foreach ([$Inception, $Interstellar, $Dunkirk] as $movie): ?>
+                <div class="col-md-4 mb-4 h-100 d-flex">
+                    <div class="card h-100 w-100 shadow-lg">
+                        <!-- Immagine con altezza fissa e object-fit -->
+                        <img 
+                            src="<?php echo htmlspecialchars($movie->coverImage); ?>" 
+                            class="card-img-top"
+                            alt="<?php echo htmlspecialchars($movie->title); ?>"
+                            style="height: 300px; object-fit: cover;"
+                        >
+                        <div class="card-body d-flex flex-column">
+                            <h5 class="card-title"><?php echo htmlspecialchars($movie->title); ?></h5>
+                            <p class="card-text"><?php echo htmlspecialchars($movie->description); ?></p>
+                            <p class="card-text"><strong>Genre:</strong>
+                                <?php foreach ($movie->genre as $genre): ?>
+                                    <?php echo htmlspecialchars($genre->name); ?>
+                                <?php endforeach; ?>
+                            </p>
+                            <p class="card-text"><strong>Director:</strong> <?php echo htmlspecialchars($movie->director); ?></p>
+                            <p class="card-text"><strong>Year:</strong> <?php echo htmlspecialchars($movie->getYear()); ?></p>
+                        </div>
+                    </div>
+                </div>
+            <?php endforeach; ?>
+        </div>
+    </main>
 </body>
 </html>

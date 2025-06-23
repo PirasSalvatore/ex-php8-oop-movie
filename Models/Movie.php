@@ -7,10 +7,11 @@ Class Movie {
     public $year;
     public $description;
     public $genre = [];
+    public $coverImage;
 
     use Reviews;
 
-    public function __construct($title, $director, $year, $description, array $genre) {
+    public function __construct($title, $director, $year, $description, array $genre, $coverImage) {
         $this->title = $title;
         $this->director = $director;
         $this->year = $year;
@@ -21,6 +22,7 @@ Class Movie {
             }
             $this->genre[] = $g;
         }
+        $this->coverImage = $coverImage;
     }
 
     public function getYear(){
